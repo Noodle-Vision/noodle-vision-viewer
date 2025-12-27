@@ -9,8 +9,8 @@
         #login-box { display: block; }
         #hud-box { display: none; }
         input { padding: 10px; border-radius: 5px; border: none; margin-bottom: 10px; width: 200px; }
-        button { padding: 10px 20px; background: #ffdw00; color: black; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .coin-display { font-size: 48px; color: #ffdw00; margin: 20px 0; }
+        button { padding: 10px 20px; background: #ffcc00; color: black; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .coin-display { font-size: 48px; color: #ffcc00; margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -18,28 +18,36 @@
         <div id="login-box">
             <h1>Noodle VISION Subscriber Login</h1>
             <input type="password" id="key" placeholder="Enter License Key"><br>
-            <button onclick="login()">Connect to HUD</button>
+            <button id="loginBtn">Connect to HUD</button>
         </div>
 
         <div id="hud-box">
             <h1>Noodle VISION HUD</h1>
             <div class="coin-display">🪙 <span id="balance">0</span> Smartcoins</div>
-            <button onclick="simulateUpload()">Simulate Upload +10</button>
+            <button id="uploadBtn">Simulate Upload +10</button>
         </div>
     </div>
 
     <script type="module">
         import { addCoins, getCoins } from './smartcoin.js';
 
-        // Login Logic
-        window.login = () => {
-            document.getElementById('login-box').style.display = 'none';
-            document.getElementById('hud-box').style.display = 'block';
-            updateDisplay();
+        const loginBtn = document.getElementById('loginBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        // Logic to unlock the dream
+        loginBtn.onclick = () => {
+            const keyInput = document.getElementById('key').value;
+            if (keyInput === "NV2025") {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('hud-box').style.display = 'block';
+                updateDisplay();
+            } else {
+                alert("Invalid License Key!");
+            }
         };
 
         // HUD Logic
-        window.simulateUpload = () => {
+        uploadBtn.onclick = () => {
             addCoins(10);
             updateDisplay();
         };
