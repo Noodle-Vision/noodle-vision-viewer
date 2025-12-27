@@ -1,1 +1,52 @@
-<!doctype html><html><body><h1>Noodle VISION HUD0/h1></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Noodle VISION HUD</title>
+    <style>
+        body { background: #111; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { text-align: center; padding: 40px; border: 2px solid #444; border-radius: 15px; background: #222; }
+        #login-box { display: block; }
+        #hud-box { display: none; }
+        input { padding: 10px; border-radius: 5px; border: none; margin-bottom: 10px; width: 200px; }
+        button { padding: 10px 20px; background: #ffdw00; color: black; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .coin-display { font-size: 48px; color: #ffdw00; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="login-box">
+            <h1>Noodle VISION Subscriber Login</h1>
+            <input type="password" id="key" placeholder="Enter License Key"><br>
+            <button onclick="login()">Connect to HUD</button>
+        </div>
+
+        <div id="hud-box">
+            <h1>Noodle VISION HUD</h1>
+            <div class="coin-display">🪙 <span id="balance">0</span> Smartcoins</div>
+            <button onclick="simulateUpload()">Simulate Upload +10</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { addCoins, getCoins } from './smartcoin.js';
+
+        // Login Logic
+        window.login = () => {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('hud-box').style.display = 'block';
+            updateDisplay();
+        };
+
+        // HUD Logic
+        window.simulateUpload = () => {
+            addCoins(10);
+            updateDisplay();
+        };
+
+        function updateDisplay() {
+            document.getElementById('balance').innerText = getCoins() || 0;
+        }
+    </script>
+</body>
+</html>
