@@ -2,59 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noodle VISION HUD</title>
     <style>
-        body { background: #111; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { text-align: center; padding: 40px; border: 2px solid #444; border-radius: 15px; background: #222; }
+        body { background: #111; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .container { text-align: center; padding: 40px; border: 1px solid #333; border-radius: 20px; background: rgba(34, 34, 34, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 350px; }
         #login-box { display: block; }
         #hud-box { display: none; }
-        input { padding: 10px; border-radius: 5px; border: none; margin-bottom: 10px; width: 200px; }
-        button { padding: 10px 20px; background: #ffcc00; color: black; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .coin-display { font-size: 48px; color: #ffcc00; margin: 20px 0; }
+        h1 { font-size: 24px; margin-bottom: 20px; color: #eee; }
+        input { padding: 12px; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; width: 80%; background: #000; color: #fff; text-align: center; font-size: 16px; }
+        button { padding: 12px 25px; background: #ffcc00; color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: transform 0.2s, background 0.2s; width: 90%; }
+        button:hover { background: #e6b800; transform: scale(1.02); }
+        button:active { transform: scale(0.98); }
+        .coin-display { font-size: 50px; color: #ffcc00; margin: 25px 0; text-shadow: 0 0 15px rgba(255, 204, 0, 0.3); }
+        .label { color: #888; font-size: 14px; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="login-box">
-            <h1>Noodle VISION Subscriber Login</h1>
-            <input type="password" id="key" placeholder="Enter License Key"><br>
+            <h1>Noodle VISION Login</h1>
+            <input type="password" id="key" placeholder="Enter License Key">
             <button id="loginBtn">Connect to HUD</button>
+            <div class="label">Requires Active Subscription</div>
         </div>
 
         <div id="hud-box">
             <h1>Noodle VISION HUD</h1>
-            <div class="coin-display">🪙 <span id="balance">0</span> Smartcoins</div>
-            <button id="uploadBtn">Simulate Upload +10</button>
+            <div class="coin-display">🪙 <span id="balance">0</span></div>
+            <div style="margin-bottom: 20px; color: #ffcc00; font-weight: bold;">Smartcoins Earned</div>
+            <button id="uploadBtn">Simulate File Upload (+10)</button>
+            <div class="label">Session Active</div>
         </div>
     </div>
 
-    <script type="module">
-        import { addCoins, getCoins } from './smartcoin.js';
+    <script>
+        // --- EMBEDDED LOGIC (Replaces smartcoin.js) ---
+        let smartcoins = parseInt(localStorage.getItem('nv_coins')) || 0;
+
+        function saveCoins() {
+            localStorage.setItem('nv_coins', smartcoins);
+        }
 
         const loginBtn = document.getElementById('loginBtn');
         const uploadBtn = document.getElementById('uploadBtn');
+        const balanceDisplay = document.getElementById('balance');
 
-        // Logic to unlock the dream
+        // Unlock Logic (Your Master Key is NV2025)
         loginBtn.onclick = () => {
             const keyInput = document.getElementById('key').value;
             if (keyInput === "NV2025") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('hud-box').style.display = 'block';
-                updateDisplay();
+                balanceDisplay.innerText = smartcoins;
             } else {
-                alert("Invalid License Key!");
+                alert("Invalid License Key! Access Denied.");
             }
         };
 
         // HUD Logic
         uploadBtn.onclick = () => {
-            addCoins(10);
-            updateDisplay();
+            smartcoins += 10;
+            saveCoins();
+            balanceDisplay.innerText = smartcoins;
         };
-
-        function updateDisplay() {
-            document.getElementById('balance').innerText = getCoins() || 0;
-        }
     </script>
 </body>
 </html>
